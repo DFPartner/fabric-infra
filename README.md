@@ -1,4 +1,4 @@
-# k3s-df: Argo CD App-of-Apps Setup
+# Fabric Infra: Argo CD App-of-Apps Setup
 
 This repository contains the Infrastructure as Code (IaC) and Application definitions for a Kubernetes cluster managed by Argo CD.
 

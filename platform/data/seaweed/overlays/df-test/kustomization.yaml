@@ -1,35 +1,20 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-# 1. Inherit from Base
+# 1. Inherit the Base
 resources:
   - ../../base
-  - external-secret.yaml # ADD the External Secret definition
+  - sealed-sws3-secret.yaml
 
-# 2. Patch the Helm Chart with Prod Values
-patches:
-  - patch: |-
-      apiVersion: helm.cattle.io/v1
-      kind: HelmChart
-      metadata:
-        name: data-seaweedfs
-        namespace: data
-      spec:
-        valuesContent: |-
-          # We inject the content of values-prod.yaml here via Kustomize magic
-          # (Or simpler: use helmCharts override below)
-    target:
-      kind: HelmChart
-      name: data-seaweedfs
-
-# BETTER WAY for Helm in Kustomize:
-# Redefine the chart to merge the values
+# 2. Configure the Chart for Local
 helmCharts:
   - name: seaweedfs
     repo: https://seaweedfs.github.io/seaweedfs/helm
     version: 4.0.406
     releaseName: data-seaweedfs
     namespace: data
+    # Load the base values first...
     valuesFile: ../../base/values.yaml
+    # ...then merge the local overrides on top
     additionalValuesFiles:
-      - values-df-test.yaml # <--- This merges prod values on top of base
+      - values-df-test.yaml

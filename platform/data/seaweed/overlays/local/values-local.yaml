@@ -1,6 +1,8 @@
+# Warnings:
+# - no 'seaweed' root, starts directly with the content
+# - objects are just strings so the pipe is necessary
 s3:
-  # 1. Mount the secret that the SealedSecrets controller just decrypted for us.
-  # We assume your sealed-secret.yaml creates a Secret named 's3-secret'.
+  # 1. Mount the secret as a volume
   extraVolumeMounts: |
     - name: s3-auth-config
       mountPath: /etc/seaweedfs

@@ -1,0 +1,15 @@
+seaweedfs:
+  s3:
+    # Mount the secret that ESO created (s3-secret)
+    extraVolumeMounts:
+      - name: s3-auth-config
+        mountPath: /etc/seaweedfs
+        readOnly: true
+
+    # Point Seaweed to the mounted file
+    authConfig: /etc/seaweedfs/s3_config.json
+
+  extraVolumes:
+    - name: s3-auth-config
+      secret:
+        secretName: s3-secret # Matches the target.name in external-secret.yaml

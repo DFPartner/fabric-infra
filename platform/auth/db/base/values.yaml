@@ -1,0 +1,38 @@
+# Basic Metadata
+fullnameOverride: "auth-postgres"
+commonLabels:
+  component: database
+  service: auth
+
+# 1. Image Configuration (Force v18)
+image:
+  tag: "18.0" # Requesting PostgreSQL 18.0 specifically
+
+# 2. Authentication (Connect to your existing Secret)
+auth:
+  # Use the Sealed Secret you already created
+  existingSecret: "keycloak-pg-creds"
+  secretKeys:
+    adminPasswordKey: "postgres-password"
+
+customUser:
+  existingSecret: "keycloak-pg-creds"
+  secretKeys:
+    name: "name"
+    password: "password"
+    database: "customDb"
+
+# 3. Persistence
+primary:
+  persistence:
+    enabled: true
+    size: 5Gi
+    storageClass: local-path
+
+# 4. Resources (Lightweight for local)
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      memory: 512Mi

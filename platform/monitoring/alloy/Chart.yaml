@@ -1,0 +1,7 @@
+apiVersion: v2
+name: alloy-wrapper
+version: 1.0.0
+dependencies:
+  - name: alloy
+    version: 1.5.1 # Check for latest version
+    repository: https://grafana.github.io/helm-charts

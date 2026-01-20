@@ -1,0 +1,38 @@
+# Default values for microservice-chart.
+
+# 1. Naming and Image
+nameOverride: ""
+fullnameOverride: ""
+image:
+  repository: nginx # Placeholder
+  pullPolicy: IfNotPresent
+  tag: "" # defaults to appVersion
+
+# 2. Scaling (Default to 1 for your low-load env)
+replicaCount: 1
+
+# 3. Networking
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080 # Spring Boot usually defaults to 8080
+
+# 4. Resources (Default is SMALL to save RAM)
+resources:
+  requests:
+    memory: "256Mi"
+    cpu: "100m"
+  limits:
+    memory: "512Mi" # Kotlin apps might need override to 768Mi or 1Gi
+
+# 5. Environment Variables
+env: {}
+# Example usage in override file:
+# env:
+#   DB_HOST: "mssql-master"
+
+# 6. Observability (Auto-injection toggles)
+observability:
+  otlp:
+    enabled: true
+    endpoint: "http://alloy.monitoring.svc:4317" # The internal gRPC address of Alloy

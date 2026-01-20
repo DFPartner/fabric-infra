@@ -1,0 +1,17 @@
+sealed-secrets:
+  fullnameOverride: sealed-secrets-controller
+
+  # If you want to customize the namespace (defaults to release namespace)
+  global:
+    namespace: auth
+
+  # Security Context (Good practice for production)
+  podSecurityContext:
+    enabled: true
+    fsGroup: 65534
+
+  # Metrics for Prometheus
+  metrics:
+    serviceMonitor:
+      enabled: false
+      namespace: monitoring

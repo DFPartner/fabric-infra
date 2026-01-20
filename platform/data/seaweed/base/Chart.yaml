@@ -1,0 +1,7 @@
+apiVersion: v2
+name: data-seaweedfs
+version: 1.0.0
+dependencies:
+  - name: seaweedfs
+    version: 4.0.406 # Check ArtifactHub for latest
+    repository: https://seaweedfs.github.io/seaweedfs/helm

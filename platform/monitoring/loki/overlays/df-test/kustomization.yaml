@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - external-secret.yaml # <--- Fetches from Azure Key Vault
+
+helmCharts:
+  - name: loki
+    repo: https://grafana.github.io/helm-charts
+    version: 6.49.0
+    releaseName: mon-loki
+    namespace: monitoring
+    valuesFile: ../../base/values.yaml

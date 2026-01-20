@@ -1,0 +1,16 @@
+# We only need the S3 part
+s3:
+  enabled: true
+  port: 8333
+
+# Persistence (One 20GB volume for everything)
+volume:
+  storage:
+    size: 20Gi
+    type: persistentVolumeClaim
+
+# Resources (Very lightweight)
+filer:
+  resources:
+    limits:
+      memory: 512Mi

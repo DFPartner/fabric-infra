@@ -1,0 +1,71 @@
+deploymentMode: SingleBinary
+
+loki:
+  commonConfig:
+    replication_factor: 1
+  storage:
+    type: 's3'
+    bucketNames:
+      chunks: loki-chunks
+      ruler: loki-ruler
+      admin: loki-admin
+    s3:
+      endpoint: 'http://seaweedfs-s3.data.svc:8333'
+      secretAccessKey: "$(SWFS_S3_SECRET_KEY)"
+      accessKeyId: "$(SWFS_S3_ACCESS_KEY)"
+      s3ForcePathStyle: true
+      insecure: true
+  schemaConfig:
+    configs:
+      - from: 2024-01-01
+        store: tsdb
+        object_store: s3
+        schema: v13
+        index:
+          prefix: index_
+          period: 24h
+
+  # REPLACE the 'extraEnvFrom' block in values.yaml with this:
+  extraEnv:
+    - name: SWFS_S3_ACCESS_KEY
+      valueFrom:
+        secretKeyRef:
+          name: monitoring-creds
+          key: access_key_id      # <--- Key inside your secret
+    - name: SWFS_S3_SECRET_KEY
+      valueFrom:
+        secretKeyRef:
+          name: monitoring-creds
+          key: secret_access_key  # <--- Key inside your secret
+
+# Disable all microservices, enable single binary
+singleBinary:
+  replicas: 1
+  resources:
+    limits:
+      memory: 4Gi
+    requests:
+      cpu: 500m
+      memory: 1Gi
+  persistence:
+    enabled: true
+    size: 10Gi
+    storageClass: local-path
+
+write:
+  replicas: 0
+read:
+  replicas: 0
+backend:
+  replicas: 0
+gateway:
+  replicas: 1
+
+# Disable unneeded observability of the observability tool itself
+monitoring:
+  selfMonitoring:
+    enabled: false
+    lokiCanary:
+      enabled: false
+test:
+  enabled: false

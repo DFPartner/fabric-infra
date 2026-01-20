@@ -1,0 +1,25 @@
+# 01-namespaces.yaml
+apiVersion: v1
+kind: Namespace
+metadata: 
+  name: monitoring
+---
+apiVersion: v1
+kind: Namespace
+metadata: 
+  name: data
+---
+apiVersion: v1
+kind: Namespace
+metadata: 
+  name: apps
+---
+apiVersion: v1
+kind: Namespace
+metadata: 
+  name: argocd
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: auth

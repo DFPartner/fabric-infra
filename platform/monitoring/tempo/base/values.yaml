@@ -1,0 +1,48 @@
+tempo:
+  repository: grafana/tempo
+  multitenancyEnabled: false
+  # 1. Run in Monolithic mode (simplest for K3s)
+  # (Older charts used 'deploymentMode', newer ones imply it via configuring the 'tempo' section)
+
+  # 2. Configure Receivers (How Alloy talks to Tempo)
+  # Alloy uses OTLP. We explicitly enable it here.
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+          endpoint: "0.0.0.0:4317" # Alloy usually sends to this
+        http:
+          endpoint: "0.0.0.0:4318"
+
+  # 3. Configure Storage (SeaweedFS S3)
+  storage:
+    trace:
+      backend: s3
+      s3:
+        bucket: tempo-traces
+        endpoint:  'seaweedfs-s3.data.svc:8333'
+        insecure: true
+        secret_key: "$(SWFS_S3_SECRET_KEY)"
+        access_key: "$(SWFS_S3_ACCESS_KEY)"
+
+  # 4. Inject the Secrets
+  # This tells Kubernetes: "Look for a secret named 'monitoring-creds'
+  # and map its keys to environment variables that Tempo can read."
+  # REPLACE the 'extraEnvFrom' block in values.yaml with this:
+  extraEnv:
+    - name: S3_ACCESS_KEY
+      valueFrom:
+        secretKeyRef:
+          name: monitoring-creds
+          key: access_key_id      # <--- Key inside your secret
+    - name: S3_SECRET_KEY
+      valueFrom:
+        secretKeyRef:
+          name: monitoring-creds
+          key: secret_access_key  # <--- Key inside your secret
+
+  # 5. Persistence (Optional but recommended for the Wal/Cache)
+  persistence:
+    enabled: true
+    size: 10Gi
+    storageClass: local-path

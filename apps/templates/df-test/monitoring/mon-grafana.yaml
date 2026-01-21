@@ -4,7 +4,7 @@ metadata:
   name: mon-grafana
   namespace: argocd
 spec:
-  project: default
+  project: platform-ops
   source:
     repoURL: https://github.com/DFPartner/fabric-infra.git'
     targetRevision: HEAD

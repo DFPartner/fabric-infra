@@ -5,7 +5,6 @@ namespace: auth
 
 resources:
   - sealed-keycloak-admin-creds.yaml
-  - sealed-keycloak-db-creds.yaml
 
 helmCharts:
   - name: keycloak

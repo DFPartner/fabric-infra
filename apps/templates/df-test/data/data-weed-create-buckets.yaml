@@ -23,10 +23,10 @@ spec:
               echo "Creating buckets..."
               # In SeaweedFS, creating a folder under /buckets/ creates the S3 bucket
               # The 'fs.mkdirs' command in weed shell handles this
-              echo "fs.mkdirs /buckets/tempo-traces" | weed shell -master=data-seaweedfs:9333
-              echo "fs.mkdirs /buckets/loki-chunks" | weed shell -master=data-seaweedfs:9333
-              echo "fs.mkdirs /buckets/loki-ruler" | weed shell -master=data-seaweedfs:9333
-              echo "fs.mkdirs /buckets/loki-admin" | weed shell -master=data-seaweedfs:9333
+              echo "fs.mkdirs /buckets/tempo-traces" | weed shell -master=seaweedfs-master:9333
+              echo "fs.mkdirs /buckets/loki-chunks" | weed shell -master=seaweedfs-master:9333
+              echo "fs.mkdirs /buckets/loki-ruler" | weed shell -master=seaweedfs-master:9333
+              echo "fs.mkdirs /buckets/loki-admin" | weed shell -master=seaweedfs-master:9333
               
               echo "Buckets created successfully."
       restartPolicy: OnFailure

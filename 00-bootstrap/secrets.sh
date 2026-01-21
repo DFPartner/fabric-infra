@@ -53,3 +53,14 @@ kubectl create secret generic keycloak-admin-creds \
 kubeseal --controller-name=sealed-secrets-controller \
   --controller-namespace=auth \
   --format=yaml < raw-keycloak-admin-creds.yaml > sealed-keycloak-admin-creds.yaml
+
+
+# Monitoring (done in Loki, used by Tempo)
+# Run this locally to create the encrypted file
+kubectl create secret generic monitoring-creds \
+  --from-literal=access_key_id="admin" \
+  --from-literal=secret_access_key="SafePassword123!" \
+  --namespace monitoring \
+  --dry-run=client -o yaml > raw-monitoring-creds.yaml
+
+kubeseal --cert=pub-sealed-secrets.pem --format=yaml < raw-monitoring-creds.yaml > sealed-monitoring-creds.yaml

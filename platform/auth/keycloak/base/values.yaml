@@ -23,10 +23,7 @@ postgres:
 extraEnv:
   # --- Admin Credentials ---
   - name: KEYCLOAK_ADMIN
-    valueFrom:
-      secretKeyRef:
-        name: keycloak-admin-creds
-        key: admin-user # Matches your sealed secret
+    value: admin
   - name: KEYCLOAK_ADMIN_PASSWORD
     valueFrom:
       secretKeyRef:
@@ -45,17 +42,17 @@ extraEnv:
   - name: KC_DB_URL_DATABASE
     valueFrom:
       secretKeyRef:
-        name: keycloak-pg-creds
-        key: customDb # Matches your sealed secret
+        name: keycloak-db-creds
+        key: database # Matches your sealed secret
   - name: KC_DB_USERNAME
     valueFrom:
       secretKeyRef:
-        name: keycloak-pg-creds
+        name: keycloak-db-creds
         key: name # Matches your sealed secret
   - name: KC_DB_PASSWORD
     valueFrom:
       secretKeyRef:
-        name: keycloak-pg-creds
+        name: keycloak-db-creds
         key: password # Matches your sealed secret
 
   # --- Operational Settings ---

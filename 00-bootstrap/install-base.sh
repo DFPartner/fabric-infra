@@ -69,7 +69,7 @@ sudo snap install helm --classic
 kubectl apply -f 01-namespaces.yaml
 
 # install argocd
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yam
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml --request-timeout=180s
 # create a deploy key to github
 ssh-keygen -t ed25519 -C "argocd-deploy-key" -f argocd_key -N ""
 kubectl create secret generic infra-repo-creds \

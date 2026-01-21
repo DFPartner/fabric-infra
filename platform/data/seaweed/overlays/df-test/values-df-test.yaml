@@ -11,7 +11,7 @@ s3:
   # Point Seaweed to the mounted file
   authConfig: /etc/seaweedfs/s3_config.json
 
-extraVolumes: |
-  - name: s3-auth-config
-    secret:
-      secretName: seaweedfs-s3-secret
+  extraVolumes: |
+    - name: s3-auth-config
+      secret:
+        secretName: seaweedfs-s3-secret

@@ -1,0 +1,48 @@
+# 1. Admin Credentials (using your existing secret)
+admin:
+  existingSecret: "grafana-admin-creds"
+  userKey: "admin-user"
+  passwordKey: "admin-password"
+
+# 2. Persistence
+persistence:
+  enabled: true
+  storageClassName: local-path
+  size: 10Gi
+
+# 3. Ingress (Expose via Traefik)
+ingress:
+  enabled: true
+  ingressClassName: traefik
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+  hosts:
+    - grafana.lan # Or grafana.localhost
+
+# 4. Data Sources (Connect to the NEW Prometheus service)
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        # NOTE: The standalone chart service name is usually '{releaseName}-server'
+        url: http://mon-prometheus-server.monitoring.svc.cluster.local
+        access: proxy
+        isDefault: true
+
+      - name: Loki
+        type: loki
+        url: http://mon-loki-gateway.monitoring.svc
+        access: proxy
+        jsonData:
+          derivedFields:
+            - datasourceUid: tempo
+              matcherRegex: "traceID=(\\w+)"
+              name: TraceID
+              url: "$${__value.raw}"
+
+      - name: Tempo
+        type: tempo
+        url: http://mon-tempo.monitoring.svc:3100
+        access: proxy

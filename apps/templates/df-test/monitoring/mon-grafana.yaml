@@ -1,18 +1,16 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: mon-prometheus
+  name: mon-grafana
   namespace: argocd
-  finalizers:
-    - resources-finalizer.argocd.argoproj.io
 spec:
-  project: platform-ops
+  project: default
   source:
-    repoURL: 'https://github.com/DFPartner/fabric-infra.git'
+    repoURL: https://github.com/DFPartner/fabric-infra.git'
     targetRevision: HEAD
-    path: platform/monitoring/prom-stack/overlays/df-test
+    path: platform/monitoring/grafana/overlays/df-test
   destination:
-    server: 'https://kubernetes.default.svc'
+    server: https://kubernetes.default.svc
     namespace: monitoring
   syncPolicy:
     automated:

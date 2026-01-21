@@ -1,0 +1,29 @@
+# Disable components we don't need right now
+alertmanager:
+  enabled: false
+pushgateway:
+  enabled: false
+nodeExporter:
+  enabled: true # Keeps checking node health
+
+server:
+  # Enable Remote Write if you plan to push metrics to it (like with Alloy)
+  enableRemoteWriteReceiver: true
+
+  retention: "28d"
+
+  resources:
+    limits:
+      memory: 2Gi
+    requests:
+      memory: 512Mi
+
+  persistentVolume:
+    enabled: true
+    size: 20Gi
+    storageClass: "local-path"
+
+  # Standard Service definition
+  service:
+    servicePort: 80
+    type: ClusterIP

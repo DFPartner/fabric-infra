@@ -64,3 +64,15 @@ kubectl create secret generic monitoring-creds \
   --dry-run=client -o yaml > raw-monitoring-creds.yaml
 
 kubeseal --cert=pub-sealed-secrets.pem --format=yaml < raw-monitoring-creds.yaml > sealed-monitoring-creds.yaml
+
+
+# Grafana (part of Prometheus Stack)
+kubectl create secret generic grafana-admin-creds \
+  --from-literal=admin-user=admin \
+  --from-literal=admin-password=SafePassword123! \
+  --namespace monitoring \
+  --dry-run=client -o yaml > raw-grafana-creds.yaml
+
+kubeseal --controller-name=sealed-secrets-controller \
+  --controller-namespace=auth \
+  --format=yaml < raw-grafana-creds.yaml > sealed-grafana-creds.yaml

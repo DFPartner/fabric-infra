@@ -6,11 +6,11 @@ metadata:
 spec:
   project: platform-ops
   source:
-    repoURL: https://github.com/DFPartner/fabric-infra.git'
+    repoURL: 'https://github.com/DFPartner/fabric-infra.git'
     targetRevision: HEAD
     path: platform/monitoring/grafana/overlays/df-test
   destination:
-    server: https://kubernetes.default.svc
+    server: 'https://kubernetes.default.svc'
     namespace: monitoring
   syncPolicy:
     automated:

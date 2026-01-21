@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-s3-buckets
+  namespace: data
+  annotations:
+    # 1. Run this AFTER the main application is applied
+    argocd.argoproj.io/hook: PostSync
+    # 2. Delete this Job object after it succeeds (keeps cluster clean)
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+spec:
+  # Retry 5 times if the Master isn't ready immediately
+  backoffLimit: 5
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: weed-shell
+          image: chrislusf/seaweedfs:4.06
+          # We use a pipe to send commands to the shell standard input
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              echo "Connecting to Master and Filer to create buckets..."
+              
+              # Pipe the commands into 'weed shell'
+              # Note: We use the SERVICE DNS names here, not localhost
+              echo -e "s3.bucket.create -name tempo-traces\ns3.bucket.create -name loki-chunks\ns3.bucket.create -name loki-ruler\ns3.bucket.create -name loki-admin\ns3.bucket.list" | \
+              weed shell \
+                -master=seaweedfs-master.data:9333 \
+                -filer=seaweedfs-filer-client.data:8888

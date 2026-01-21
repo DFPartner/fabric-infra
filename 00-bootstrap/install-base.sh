@@ -104,3 +104,14 @@ kubectl -n argocd set env deploy/argocd-repo-server ARGOCD_EXEC_TIMEOUT=180s
 
 kubectl patch cm argocd-cm -n argocd --type merge \
   -p '{"data":{"kustomize.buildOptions":"--enable-helm --load-restrictor LoadRestrictionsNone"}}'
+
+
+kubectl exec -it -n data service/seaweedfs-master -- weed shell \
+  -master=localhost:9333 \
+  -filer=seaweedfs-filer-client.data:8888
+s3.bucket.create -name tempo-traces
+s3.bucket.create -name loki-chunks
+s3.bucket.create -name loki-ruler
+s3.bucket.create -name loki-admin
+
+s3.bucket.list

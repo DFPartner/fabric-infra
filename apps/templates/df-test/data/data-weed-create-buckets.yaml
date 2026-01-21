@@ -1,0 +1,36 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: data-weed-create-buckets
+  annotations:
+    # Argo CD Hook: Runs after the main sync is successful
+    argocd.argoproj.io/hook: PostSync
+    # Delete the job after it succeeds to keep the cluster clean
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+spec:
+  template:
+    spec:
+      containers:
+        - name: create-buckets
+          # Use the same image version as your SeaweedFS deployment
+          image: chrislusf/seaweedfs:4.06
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              echo "Waiting for SeaweedFS Master..."
+              # Adjust 'seaweedfs-master' to your actual Service name
+              until weed shell -master=data-seaweedfs:9333 -command "cluster.check"; do
+                echo "Master not ready, retrying..."
+                sleep 5
+              done
+
+              echo "Creating buckets..."
+              # In SeaweedFS, creating a folder under /buckets/ creates the S3 bucket
+              # The 'fs.mkdirs' command in weed shell handles this
+              echo "fs.mkdirs /buckets/tempo-traces" | weed shell -master=data-seaweedfs:9333
+              echo "fs.mkdirs /buckets/loki-chunks" | weed shell -master=data-seaweedfs:9333
+              echo "fs.mkdirs /buckets/loki-ruler" | weed shell -master=data-seaweedfs:9333
+              echo "fs.mkdirs /buckets/loki-admin" | weed shell -master=data-seaweedfs:9333
+              
+              echo "Buckets created successfully."
+      restartPolicy: OnFailure

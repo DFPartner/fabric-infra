@@ -100,3 +100,7 @@ sudo apt-get install helm
 
 
 kubectl -n argocd set env deploy/argocd-repo-server ARGOCD_EXEC_TIMEOUT=180s
+
+
+kubectl patch cm argocd-cm -n argocd --type merge \
+  -p '{"data":{"kustomize.buildOptions":"--enable-helm --load-restrictor LoadRestrictionsNone"}}'

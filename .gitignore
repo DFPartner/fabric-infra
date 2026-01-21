@@ -34,3 +34,9 @@ out/
 
 ### VS Code ###
 .vscode/
+
+
+# Ignore Helm charts downloaded by Kustomize
+charts/
+*/charts/
+**/charts/

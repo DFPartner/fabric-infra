@@ -18,11 +18,7 @@ spec:
           args:
             - |
               echo "Waiting for SeaweedFS Master..."
-              # Adjust 'seaweedfs-master' to your actual Service name
-              until weed shell -master=data-seaweedfs:9333 -command "cluster.check"; do
-                echo "Master not ready, retrying..."
-                sleep 5
-              done
+              sleep 30  
 
               echo "Creating buckets..."
               # In SeaweedFS, creating a folder under /buckets/ creates the S3 bucket

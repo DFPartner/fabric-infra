@@ -1,12 +1,12 @@
 # User-friendly parameters
 loki:
-  endpoint: "http://loki-gateway.monitoring.svc/loki/api/v1/push"
+  endpoint: "http://mon-loki-gateway.monitoring.svc/loki/api/v1/push"
 
 tempo:
-  endpoint: "tempo.monitoring.svc:4317"
+  endpoint: "mon-tempo.monitoring.svc:4317"
 
 prometheus:
-  writeEndpoint: "http://prom-stack-prometheus.monitoring.svc:9090/api/v1/write"
+  writeEndpoint: "http://mom-prometheus.monitoring.svc:9090/api/v1/write"
 
 # Configuration for the Sub-Chart (Official Alloy)
 alloy:

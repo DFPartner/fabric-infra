@@ -15,6 +15,3 @@ helmCharts:
     namespace: data
     # Load the base values first...
     valuesFile: ../../base/values.yaml
-    # ...then merge the local overrides on top
-    additionalValuesFiles:
-      - values-df-test.yaml

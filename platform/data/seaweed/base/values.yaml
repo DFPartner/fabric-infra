@@ -3,6 +3,21 @@ s3:
   enabled: true
   port: 8333
 
+  # 1. Mount the secret as a volume
+  extraVolumeMounts: |
+    - name: s3-auth-config
+      mountPath: /etc/seaweedfs
+      readOnly: true
+
+  # 2. Tell SeaweedFS to read the config from that mount
+  authConfig: /etc/seaweedfs/s3_config.json
+
+  # 3. Define the volume for the pod
+  extraVolumes: |
+    - name: s3-auth-config
+      secret:
+        secretName: seaweedfs-s3-secret
+
 # Persistence (One 20GB volume for everything)
 volume:
   storage:

@@ -1,0 +1,13 @@
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  name: keycloak-admin-creds
+  namespace: auth
+spec:
+  encryptedData:
+    admin-password: AgBlSx3PpBAZr7n5t4FdmrSbeWAgq4of1GifP+JX7uE3/BJgdhLENCLmBxQuNKNKkx7L7AR10j6f+72JpK9v0zRMqs2M/gfQA4io0uuIImu8A9cqA6e0fLo3g635XSBZRXagSlH8ijD+VaFljKR74Xqw1zCUNIL2aujpnjbwMqHlVWgxXaZI0igSZiCiXXTsNprSL39zkM8GctYC67Z1rrS9he0Z12x7LFTRetgjjYn3oQR6tlXWE1S4bHPonuFBWlfdsxadOlgkaSdKGQFfqAY1l7MPDuqn2omAgyxlnZd2S7FcOzHmIhOA+ees2i0c6YDEy7c1FbS62rOBuTuwHimNrcW+NYPJgMVxmLTgKdDwAc0pILgnMO1DcW1ajLLtNGngcDKks0mFYO5EaNRFW5BdWb7x8p+OSQKUQbREHphFPynYquYh5fyLHEXRCwzQ0Y1NmqIGBD0v27seevV6tR0UWp7zpk5jFVMqOVi72z0B8Zzg14HJWyAcnJMfdDg/8QBfGfI/1G6DarDKPGH3dX97H3//JtqcivUN0+NCkvJzJUekJWRGEeBWilvgRGLv1tOCRzdGS9vxMeUMl/rsybDRI+kysghQFRKBux2/nuoi7Yf/DlTz334REgbpOcKk16uerShPY8PyaLrxd72uiXzllrpesxGfjaYuhXsmH+gfkSQRvpk53KnplmB8P6lCpfKOMITj/TF6NAuKHP4qdzmVD1hi9kaeaA==
+  template:
+    metadata:
+      name: keycloak-admin-creds
+      namespace: auth

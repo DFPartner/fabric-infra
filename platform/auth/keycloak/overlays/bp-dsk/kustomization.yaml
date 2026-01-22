@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: auth
+
+resources:
+  - sealed-keycloak-admin-creds.yaml
+
+helmCharts:
+  - name: keycloak
+    # Switch to CloudPirates
+    repo: oci://registry-1.docker.io/cloudpirates
+    version: 0.11.4 # Corresponds to Keycloak ~26.x
+    releaseName: auth-keycloak
+    namespace: auth
+    valuesFile: ../../base/values.yaml
+    additionalValuesFiles:
+      - values.yaml

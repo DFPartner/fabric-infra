@@ -14,3 +14,5 @@ helmCharts:
     releaseName: auth-keycloak
     namespace: auth
     valuesFile: ../../base/values.yaml
+    additionalValuesFiles:
+      - values.yaml

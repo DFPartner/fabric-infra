@@ -7,4 +7,4 @@ grafana:
     GRAFANA_PORT:
       value: "7002"
     KC_REALM:
-      value: "bp-dsk"
+      value: "df-test"

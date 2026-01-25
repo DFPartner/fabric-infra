@@ -1,10 +1,5 @@
-# 2. Configure the chart to recognize your external DB
-database:
-  vendor: "postgres"
-  host: "auth-postgres.auth.svc.cluster.local"
-  port: "5432"
-  database: "keycloak"
-  username: "keycloak"
-  existingSecret: "keycloak-db-creds"
-
-
+extraEnv: |
+  - name: KC_HOSTNAME
+    value: "https://192.168.5.27:7001"
+  - name: KC_HTTPS_PORT
+    value: "7001"

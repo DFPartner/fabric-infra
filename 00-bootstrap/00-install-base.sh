@@ -94,11 +94,13 @@ kubectl get pods -A
 # 4.1 set up namespaces
 kubectl apply -f 01-namespaces.yaml
 # 4.2 install ArgoCD using helm
+helm repo add argo https://argoproj.github.io/argo-helm
+helm repo update
 helm install argocd argo/argo-cd --namespace argocd --create-namespace -f values.yaml
 # 4.3 get the temporary admin credentials (should be replaced later on)
 kubectl get secret infra-repo-creds -n argocd -o jsonpath="{.data.sshPrivateKey}" | base64 -d
 # 4.4 set up projects
-kubectl apply -f 02-projects.yaml
+kubectl apply -f 02-projects-<XXX>.yaml
 # 4.5 patch argo
 # Patch argo cd to enable longer timeout and enable helm and cross-app loading
 # TODO this should be moved to ArgoCD ConfigMap
@@ -106,7 +108,7 @@ kubectl -n argocd set env deploy/argocd-repo-server ARGOCD_EXEC_TIMEOUT=180s
 kubectl patch cm argocd-cm -n argocd --type merge \
   -p '{"data":{"kustomize.buildOptions":"--enable-helm --load-restrictor LoadRestrictionsNone"}}'
 # 4.6 set up credential secret manager and certificate manager
-kubectl apply -k 03-security.yaml
+kubectl apply -k 03-security
 # 4.7 once the sealed-secret manager is up and running, create all secrets - see 04-secrets.sh
 
 

@@ -6,7 +6,7 @@ metadata:
 spec:
   project: platform-ops
   source:
-    repoURL: 'https://github.com/DFPartner/fabric-infra.git'
+    repoURL: 'https://github.com/BoraPerusic/k3s-df.git'
     targetRevision: HEAD
     path: clusters/bp-dsk
   destination:

@@ -17,7 +17,7 @@ spec:
   entryPoints:
     - argocd
   routes:
-    - match: Host(`192.168.1.38`) || Host(`dsk.local`)
+    - match: Host(`192.168.5.27`)
       kind: Rule
       services:
       - name: argocd-server

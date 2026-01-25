@@ -1,0 +1,19 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: argocd-server-cert
+  namespace: argocd
+spec:
+  secretName: argocd-server-tls # <--- The name of the Secret to create
+  duration: 2160h # 90 days
+  renewBefore: 360h # 15 days
+  subject:
+    organizations:
+      - "BP"
+  # Define all the ways you access the server
+  ipAddresses:
+    - 192.168.5.27
+  issuerRef:
+    name: df-test-ca-issuer
+    kind: ClusterIssuer
+    group: cert-manager.io

@@ -1,9 +1,10 @@
 # 2. Configure the chart to recognize your external DB
 database:
+  vendor: "postgres"
   host: "auth-postgres.auth.svc.cluster.local"
   port: "5432"
-  name: "keycloak"
-  existingSecret: "keycloak-pg-creds"
-  secretKeys:
-    usernameKey: "name"
-    passwordKey: "password"
+  database: "keycloak"
+  username: "keycloak"
+  existingSecret: "keycloak-db-creds"
+
+

@@ -1,0 +1,46 @@
+# ARGO CD HELM VALUES
+
+# 1. Enable Metrics (The Global Switch)
+global:
+  logging:
+    format: json # Good for Loki
+
+# 2. Server Configuration (The UI)
+server:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: prometheus # Must match your Prometheus selector
+
+  # Disable the built-in ingress because we use Traefik IngressRoute manually
+  ingress:
+    enabled: false
+
+# 3. Repo Server (The Git Fetcher)
+repoServer:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: prometheus
+
+# 4. Application Controller (The Brain)
+controller:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: prometheus
+
+# 5. Redis (The Cache)
+redis:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: prometheus

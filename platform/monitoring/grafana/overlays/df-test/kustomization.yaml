@@ -5,6 +5,8 @@ namespace: monitoring
 
 resources:
   - sealed-grafana-creds.yaml
+  - sealed-grafana-oauth-keycloak-creds.yaml
+  - ingress-route.yaml
 
 helmCharts:
   - name: grafana
@@ -13,3 +15,5 @@ helmCharts:
     releaseName: mon-grafana
     namespace: monitoring
     valuesFile: ../../base/values.yaml
+    additionalValuesFiles:
+      - values.yaml

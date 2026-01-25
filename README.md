@@ -1,4 +1,4 @@
-# Fabric Infra: Argo CD App-of-Apps Setup
+# k3s-df: Argo CD App-of-Apps Setup
 
 This repository contains the Infrastructure as Code (IaC) and Application definitions for a Kubernetes cluster managed by Argo CD.
 
@@ -15,14 +15,14 @@ We have prepared detailed documentation for different audiences:
 ### Prerequisites
 *   A Linux machine (or VM) to act as the node.
 *   `sudo` access.
+*   `kubectl` and `helm` installed (optional, the bootstrap script installs them if missing).
 
 ### Installation
 The `00-bootstrap/` directory contains the scripts to install K3s and Argo CD from scratch.
 ```bash
 # Initialize the cluster and install Argo CD
-make init
+./00-bootstrap/00-install-base.sh
 ```
-*(Note: `make init` simply applies the manifests in `00-bootstrap/`. You may need to run `00-bootstrap/install-base.sh` manually first if you don't have K3s installed yet.)*
 
 If installing the local version, install the sealed-secrets controller first with the monitoring disabled, and enable it later when Prometheus is installed:
 ```yaml
@@ -42,13 +42,13 @@ sealed-secrets:
 ### Accessing Dashboards
 To access the Grafana dashboard:
 ```bash
-make monitoring
+kubectl port-forward -n monitoring svc/prom-stack-grafana 3000:80
 ```
 Then open `http://localhost:3000`.
 
 To get the Grafana admin password:
 ```bash
-make get-secret
+kubectl get secret --namespace monitoring grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
 ```
 
 ## Repository Structure

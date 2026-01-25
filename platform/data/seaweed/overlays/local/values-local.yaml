@@ -1,0 +1,16 @@
+s3:
+  # 1. Mount the secret that the SealedSecrets controller just decrypted for us.
+  # We assume your sealed-secret.yaml creates a Secret named 's3-secret'.
+  extraVolumeMounts: |
+    - name: s3-auth-config
+      mountPath: /etc/seaweedfs
+      readOnly: true
+
+  # 2. Tell SeaweedFS to read the config from that mount
+  authConfig: /etc/seaweedfs/s3_config.json
+
+# 3. Define the volume for the pod
+  extraVolumes: |
+    - name: s3-auth-config
+      secret:
+        secretName: seaweedfs-s3-secret

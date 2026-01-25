@@ -1,0 +1,10 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../../../platform/monitoring/alloy
+  - ../../../../platform/monitoring/grafana/overlays/bp-dsk
+  - ../../../../platform/monitoring/loki/overlays/bp-dsk
+  - ../../../../platform/monitoring/prometheus/overlays/bp-dsk
+  - ../../../../platform/monitoring/tempo/overlays/bp-dsk
+  - certificate.yaml

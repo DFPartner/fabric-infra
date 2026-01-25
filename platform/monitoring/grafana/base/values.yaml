@@ -46,3 +46,35 @@ datasources:
         type: tempo
         url: http://mon-tempo.monitoring.svc:3100
         access: proxy
+
+grafana.ini:
+  server:
+    # Critical for the redirect to work correctly
+    root_url: https://${CLUSTER_IP}:${GRAFANA_PORT}
+    domain: ${CLUSTER_IP}
+
+  auth.generic_oauth:
+    enabled: true
+    name: Keycloak
+    allow_sign_up: true
+    client_id: $__file{/etc/secrets/auth_grafana_keycloak_oauth/client_id}
+    client_secret: $__file{/etc/secrets/auth_grafana_keycloak_oauth/client_secret}
+    scopes: openid profile email offline_access roles
+    auth_url: https://${CLUSTER_IP}:${KC_PORT}/realms/${KC_REALM}/protocol/openid-connect/auth
+    token_url: https://${CLUSTER_IP}:${KC_PORT}/realms/${KC_REALM}/protocol/openid-connect/token
+    api_url: https://${CLUSTER_IP}:${KC_PORT}/realms/${KC_REALM}/protocol/openid-connect/userinfo
+
+    # Since we are using self-signed certs (or custom CA), Grafana will fail
+    # to call Keycloak unless we verify skip or mount the CA.
+    # For now, skip verify is easiest:
+    tls_skip_verify_insecure: true
+
+    # This magic line maps the "grafana-admin" Keycloak role to Grafana Admin
+    role_attribute_path: contains(realm_access.roles[*], 'grafana-admin') && 'Admin' || contains(realm_access.roles[*], 'grafana-editor') && 'Editor' || 'Viewer'
+
+extraSecretMounts:
+  - name: grafana-oauth-keycloak-creds-mount
+    secretName: grafana-oauth-keycloak-creds
+    defaultMode: 0440
+    mountPath: /etc/secrets/auth_grafana_keycloak_oauth
+    readOnly: true

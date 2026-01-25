@@ -1,0 +1,10 @@
+grafana:
+  env:
+    CLUSTER_IP:
+      value: "192.168.1.38"
+    KC_PORT:
+      value: "7001"
+    GRAFANA_PORT:
+      value: "7002"
+    KC_REALM:
+      value: "bp-dsk"

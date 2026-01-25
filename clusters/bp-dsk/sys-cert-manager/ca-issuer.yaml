@@ -1,0 +1,8 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: bp-dsk-ca-issuer
+  namespace: auth
+spec:
+  ca:
+    secretName: root-ca-secret

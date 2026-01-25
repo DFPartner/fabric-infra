@@ -5,62 +5,64 @@ replicaCount: 1
 
 # 2. Ingress (Expose UI)
 ingress:
-  enabled: true
-  className: traefik
-  annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: web
-  rules:
-    - host: keycloak.localhost
-      paths:
-        - path: /
-          pathType: Prefix
+  enabled: false
+
 # 3. Disable built-in Postgres
 postgres:
   enabled: false
 
-# 3. Environment Variables (The Universal Config)
+# 4. Add OBO feature
+conf:
+  features: "token-exchange,hostname:v2"
+
+http:
+  relativePath: '/'
+
+database:
+  vendor: "postgres"
+  hostname: "auth-postgres.auth.svc.cluster.local"
+  port: "5432"
+  database: "keycloak"
+  username: "keycloak"
+  existingSecret: "keycloak-db-creds"
+
+command:
+  - "/opt/keycloak/bin/kc.sh"
+  - "start"
+  - "--http-port=8080"
+  - "--hostname-strict=false"
+
+# 5. Environment Variables (The Universal Config)
 # Instead of relying on chart-specific parameters, we set standard Keycloak Env Vars.
-extraEnv:
+extraEnv: |
   # --- Admin Credentials ---
-  - name: KEYCLOAK_ADMIN
+  - name: KC_BOOTSTRAP_ADMIN_USERNAME
     value: admin
-  - name: KEYCLOAK_ADMIN_PASSWORD
+  - name: KC_BOOTSTRAP_ADMIN_PASSWORD
     valueFrom:
       secretKeyRef:
         name: keycloak-admin-creds
-        key: admin-password # Matches your sealed secret
-
-  # --- Database Connection --- - probably not needed
-  - name: KC_DB
-    value: postgres
-  - name: KC_DB_URL_HOST
-    # Connect to the postgres service
-    value: "auth-postgres.auth.svc.cluster.local"
-  - name: KC_DB_URL_PORT
-    value: "5432"
-  # --- Database Credentials ---
-  - name: KC_DB_URL_DATABASE
-    valueFrom:
-      secretKeyRef:
-        name: keycloak-db-creds
-        key: database # Matches your sealed secret
-  - name: KC_DB_USERNAME
-    valueFrom:
-      secretKeyRef:
-        name: keycloak-db-creds
-        key: name # Matches your sealed secret
-  - name: KC_DB_PASSWORD
-    valueFrom:
-      secretKeyRef:
-        name: keycloak-db-creds
-        key: password # Matches your sealed secret
+        key: admin-password
 
   # --- Operational Settings ---
   - name: KC_HOSTNAME
-    value: keycloak.localhost
+    value: "https://192.168.1.38:7001"
+  - name: KC_HTTPS_PORT
+    value: "7001"
+  - name: KC_HTTP_RELATIVE_PATH
+    value: "/"
   - name: KC_PROXY
-    value: edge # We are behind Traefik (Edge TLS termination)
+    value: "edge"
+  - name: KC_HOSTNAME_STRICT
+    value: "false"
+  - name: KC_HTTP_ENABLED
+    value: "true"
+  - name: KC_LOG_LEVEL
+    value: "INFO,org.keycloak.events:DEBUG"
   - name: KC_METRICS_ENABLED
     value: "true"
   - name: KC_HEALTH_ENABLED
     value: "true"
+  - name: JAVA_OPTS_APPEND
+    value: >-
+      -Djgroups.dns.query={{ include "keycloak.fullname" . }}-headless

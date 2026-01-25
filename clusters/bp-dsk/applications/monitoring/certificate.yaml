@@ -1,0 +1,20 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: monitoring-certificate
+  namespace: monitoring
+spec:
+  secretName: mon-tls
+  duration: 2160h
+  renewBefore: 360h
+  ipAddresses:
+    - 192.168.1.38
+  dnsNames:
+    - grafana.lan
+    - prometheus.lan
+    - bp-dsk.local
+    - bp-dsk.lan
+  issuerRef:
+    name: bp-dsk-ca-issuer
+    kind: ClusterIssuer
+    group: cert-manager.io

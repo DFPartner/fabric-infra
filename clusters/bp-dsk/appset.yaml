@@ -1,0 +1,34 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: bp-dsk-apps
+  namespace: argocd
+spec:
+  # 1. GENERATOR: "Find Directories"
+  generators:
+    - git:
+        repoURL: 'https://github.com/BoraPerusic/k3s-df.git'
+        revision: HEAD
+        directories:
+          - path: clusters/bp-dsk/applications/*
+
+  # 2. TEMPLATE: "Create an App for each folder"
+  template:
+    metadata:
+      name: '{{path.basename}}' # e.g., "monitoring", "data"
+    spec:
+      project: platform-ops
+      source:
+        repoURL: 'https://github.com/BoraPerusic/k3s-df.git'
+        targetRevision: HEAD
+        path: '{{path}}' # Points to clusters/home-server/applications/monitoring
+      destination:
+        server: https://kubernetes.default.svc
+        # This assumes the folder name matches the namespace name!
+        namespace: '{{path.basename}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true # Auto-create the "data" or "monitoring" namespace

@@ -13,15 +13,14 @@ This document describes the technical structure of the repository and how the co
 │   ├── data/           # Databases (Postgres, Redis, SeaweedFS, etc.)
 │   ├── middleware/     # Message queues and integration (NATS, etc.)
 │   └── monitoring/     # Observability stack (Loki, Tempo, Grafana Alloy)
-├── root-app.yaml       # The Entry Point (App-of-Apps parent)
-└── makefile            # Helper commands
+└── root-app.yaml       # The Entry Point (App-of-Apps parent)
 ```
 
 ## detailed Component Breakdown
 
 ### 1. Bootstrap (`00-bootstrap/`)
 This directory contains the scripts and manifests required to bring up a fresh cluster to the point where Argo CD takes over.
--   `install-base.sh`: A shell script that:
+-   `00-install-base.sh`: A shell script that:
     -   Installs system dependencies and K3s.
     -   Configures `kubectl` and `helm`.
     -   Installs Argo CD.

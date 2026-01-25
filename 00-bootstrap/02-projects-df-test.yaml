@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: platform-ops
+  namespace: argocd
+spec:
+  # Description
+  description: "Project for core infrastructure and platform services"
+
+  # 1. ALLOWED SOURCES (Git Repos)
+  sourceRepos:
+    - 'https://github.com/DFPartner/fabric-infra.git'
+
+  # 2. ALLOWED DESTINATIONS (Clusters & Namespaces)
+  destinations:
+    - namespace: '*'        # Allow deploying to any namespace
+      server: https://kubernetes.default.svc # Allow local cluster
+
+  # 3. ALLOWED RESOURCES
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'             # Allow creating CRDs, Namespaces, etc.

@@ -5,6 +5,7 @@ kind: Kustomization
 resources:
   - ../../base
   - sealed-sws3-secret.yaml
+  - data-weed-create-buckets.yaml
 
 # 2. Configure the Chart for Local
 helmCharts:

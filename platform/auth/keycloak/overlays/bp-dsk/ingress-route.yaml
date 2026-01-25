@@ -1,0 +1,16 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: keycloak-custom-port
+  namespace: auth
+spec:
+  entryPoints:
+    - keycloak
+  routes:
+    - match: PathPrefix(`/`)
+      kind: Rule
+      services:
+        - name: auth-keycloak-keycloakx-http
+          port: 80
+  tls:
+    secretName: auth-tls

@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: argocd
+
+# 1. Define the Helm Chart
+helmCharts:
+  - name: argo-cd
+    repo: https://argoproj.github.io/argo-helm
+    version: 9.3.5
+    releaseName: argocd
+    namespace: argocd
+    valuesFile: values.yaml
+    includeCRDs: true
+
+# 2. Include your Custom IngressRoute (The one we made earlier)
+resources:
+  - ingress-route.yaml

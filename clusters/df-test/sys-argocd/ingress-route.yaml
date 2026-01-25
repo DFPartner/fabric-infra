@@ -1,0 +1,28 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: ServersTransport
+metadata:
+  name: argocd-insecure-transport
+  namespace: argocd
+spec:
+  insecureSkipVerify: true
+
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: argocd-custom-port
+  namespace: argocd
+spec:
+  entryPoints:
+    - argocd
+  routes:
+    - match: Host(`192.168.1.38`) || Host(`dsk.local`)
+      kind: Rule
+      services:
+      - name: argocd-server
+        port: 80 # Try 80 first. If fails, try 443.
+        scheme: https # <--- Force HTTPS to backend
+        serversTransport: argocd-insecure-transport
+  tls:
+    secretName: argocd-server-tls

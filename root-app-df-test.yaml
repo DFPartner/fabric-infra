@@ -6,11 +6,13 @@ metadata:
 spec:
   project: platform-ops
   source:
-    repoURL: 'https://github.com/DFPartner/fabric-infra.git'
+    repoURL: 'https://github.com/BoraPerusic/k3s-df.git'
     targetRevision: HEAD
-    path: apps/templates/df-test
-    directory:
-      recurse: true
+    path: clusters/df-test
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true      # Delete things in cluster that are removed from Git
+      selfHeal: true   # Fix things in cluster if someone changes them manually

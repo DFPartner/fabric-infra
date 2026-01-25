@@ -1,5 +1,32 @@
 extraEnv: |
+  # --- Admin Credentials ---
+  - name: KC_BOOTSTRAP_ADMIN_USERNAME
+    value: admin
+  - name: KC_BOOTSTRAP_ADMIN_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: keycloak-admin-creds
+        key: admin-password
+
+  # --- Operational Settings ---
   - name: KC_HOSTNAME
     value: "https://192.168.5.27:7001"
   - name: KC_HTTPS_PORT
     value: "7001"
+  - name: KC_HTTP_RELATIVE_PATH
+    value: "/"
+  - name: KC_PROXY
+    value: "edge"
+  - name: KC_HOSTNAME_STRICT
+    value: "false"
+  - name: KC_HTTP_ENABLED
+    value: "true"
+  - name: KC_LOG_LEVEL
+    value: "INFO,org.keycloak.events:DEBUG"
+  - name: KC_METRICS_ENABLED
+    value: "true"
+  - name: KC_HEALTH_ENABLED
+    value: "true"
+  - name: JAVA_OPTS_APPEND
+    value: >-
+      -Djgroups.dns.query={{ include "keycloak.fullname" . }}-headless

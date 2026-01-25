@@ -80,7 +80,7 @@ kubeseal --controller-name=sealed-secrets-controller \
 # Grafana ouath (Keycloak) secret (when keycloak secret is up and running)
 kubectl create secret generic grafana-oauth-keycloak-creds \
   --from-literal=client_id=grafana \
-  --from-literal=client_secret=93lZiunmjSbNOUgBS2OZE7YYz6oMR7Rr \
+  --from-literal=client_secret=FcOLfvEuX2n6JZnrQg89g8euNRKcZtxY \
   --namespace monitoring \
   --dry-run=client -o yaml > raw-grafana-oauth-keycloak-creds.yaml
 

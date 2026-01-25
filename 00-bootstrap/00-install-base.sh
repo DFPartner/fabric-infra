@@ -108,8 +108,25 @@ kubectl -n argocd set env deploy/argocd-repo-server ARGOCD_EXEC_TIMEOUT=180s
 kubectl patch cm argocd-cm -n argocd --type merge \
   -p '{"data":{"kustomize.buildOptions":"--enable-helm --load-restrictor LoadRestrictionsNone"}}'
 # 4.6 set up credential secret manager and certificate manager
-kubectl apply -k 03-security
-# 4.7 once the sealed-secret manager is up and running, create all secrets - see 04-secrets.sh
+# 4.6.1 Add the Jetstack Repo
+helm repo add jetstack https://charts.jetstack.io
+helm repo update
+# 4.6.2 Create the Namespace
+helm install cert-manager jetstack/cert-manager \
+  --namespace auth \
+  --version v1.19.2 \
+  --set installCRDs=true
+# 4.6.3 Apply the root and ca issuers
+kubectl apply -f self-signed-issuer.yaml
+kubectl apply -f root-ca.yaml
+kubectl apply -f ca-issuer.yaml
+# 4.6.4 Install sealed secrets
+helm repo add sealed-secrets https://bitnami-labs.github.io/sealed-secrets
+helm repo update
+helm install sealed-secrets-controller sealed-secrets/sealed-secrets \
+  --namespace auth \
+  --set-string fullnameOverride=sealed-secrets-controller
+# 4.7 once the sealed-secret manager is up and running, create all secrets - see 03-secrets.sh
 
 
 # ----------------------------------------- 5. and GO ...  -------------------------------------

@@ -177,3 +177,8 @@ s3.bucket.create -name loki-ruler
 s3.bucket.create -name loki-admin
 
 s3.bucket.list
+
+# ----------------------------------------- X. add root ca -----------------------------------
+kubectl get secret root-ca-secret -n cert-manager -o jsonpath='{.data.ca\.crt}' | base64 -d > df-test-ca.crt
+sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain df-test-ca.crt
+# for windows: Double-click df-test-ca.crt -> "Install Certificate" -> "Local Machine" -> "Place all certificates in the following store" -> "Trusted Root Certification Authorities".

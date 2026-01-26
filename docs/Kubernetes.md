@@ -18,7 +18,7 @@ Since Pods come and go, their IP addresses change. A **Service** is a stable add
 
 ```mermaid
 graph TD
-    Client[User / Other App] -->|Calls| Svc[Service (Stable IP)]
+    Client[User / Other App] -->|Calls| Svc[Service]
     Svc -->|Load Balances| Pod1[Pod A (Instance 1)]
     Svc -->|Load Balances| Pod2[Pod A (Instance 2)]
     Svc -->|Load Balances| Pod3[Pod A (Instance 3)]

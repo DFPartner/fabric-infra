@@ -1,5 +1,5 @@
 extraEnv: |
   - name: KC_HOSTNAME
-    value: "https://192.168.5.27:7001"
+    value: "https://192.168.1.38:7001"
   - name: KC_HTTPS_PORT
     value: "7001"
